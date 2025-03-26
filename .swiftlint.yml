@@ -1,0 +1,64 @@
+included:
+  - Sources
+  - Tests
+excluded:
+  - Tests/LinuxMain.swift
+  - .build
+  - Examples
+
+opt_in_rules:
+  - empty_count
+  - empty_string
+  - conditional_returns_on_newline
+  - closure_spacing
+  - contains_over_first_not_nil
+  - discouraged_optional_boolean
+  - explicit_init
+  - fatal_error_message
+  - first_where
+  - force_unwrapping
+  - implicit_return
+  - implicitly_unwrapped_optional
+  - joined_default_parameter
+  - modifier_order
+  - multiline_parameters
+  - operator_usage_whitespace
+  - overridden_super_call
+  - prohibited_super_call
+  - sorted_first_last
+  - trailing_closure
+  - unneeded_parentheses_in_closure_argument
+  - vertical_parameter_alignment_on_call
+  - yoda_condition
+
+disabled_rules:
+  - identifier_name
+  - nesting
+  - function_parameter_count
+
+line_length:
+  warning: 120
+  error: 150
+  ignores_comments: true
+
+file_length:
+  warning: 500
+  error: 1200
+
+type_body_length:
+  warning: 400
+  error: 600
+
+function_body_length:
+  warning: 50
+  error: 100
+
+large_tuple:
+  warning: 3
+  error: 5
+
+cyclomatic_complexity:
+  warning: 10
+  error: 20
+
+reporter: "xcode"
