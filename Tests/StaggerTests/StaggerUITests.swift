@@ -6,13 +6,13 @@ import SwiftUI
 
 struct SampleContentView: View {
     @State private var isVisible = false
-    
+
     let items = (0..<5).map { _ in
         Color(red: Double.random(in: 0...1),
               green: Double.random(in: 0...1),
               blue: Double.random(in: 0...1))
     }
-    
+
     var body: some View {
         VStack(spacing: 20) {
             Text("Stagger Animation")
@@ -21,7 +21,7 @@ struct SampleContentView: View {
                     transition: .move(edge: .top).combined(with: .opacity),
                     priority: 10
                 )
-            
+
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 20) {
                 ForEach(items.indices, id: \.self) { index in
                     RoundedRectangle(cornerRadius: 12)
@@ -30,7 +30,7 @@ struct SampleContentView: View {
                         .stagger()
                 }
             }
-            
+
             Button("Toggle") {
                 isVisible.toggle()
             }
@@ -45,7 +45,7 @@ struct SampleContentView: View {
 
 @Test @MainActor func testSampleContentViewCreation() async {
     // Verifies that the sample view can be created without errors
-    let _ = SampleContentView()
+    _ = SampleContentView()
     // If this test completes, it implies the view was successfully created
 }
 
@@ -59,10 +59,10 @@ struct SampleContentView: View {
         .priorityOnly,
         .positionOnly(.leftToRight)
     ]
-    
+
     for strategy in strategies {
         let config = StaggerConfiguration(calculationStrategy: strategy)
-        let _ = VStack {
+        _ = VStack {
             Text("Test")
         }
         .staggerContainer(configuration: config)
@@ -80,10 +80,10 @@ struct SampleContentView: View {
         .spring(response: 0.5, dampingFraction: 0.8),
         .custom(Animation.linear(duration: 1.0))
     ]
-    
+
     for curve in curves {
         let config = StaggerConfiguration(animationCurve: curve)
-        let _ = VStack {
+        _ = VStack {
             Text("Test")
         }
         .staggerContainer(configuration: config)

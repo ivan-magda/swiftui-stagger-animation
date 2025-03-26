@@ -7,7 +7,7 @@ import XCTest
 
 @Test func testDefaultConfiguration() {
     let config = StaggerConfiguration()
-    
+
     #expect(config.baseDelay == 0.1)
     // Check animation curve type without direct comparison
     if case .default = config.animationCurve {
@@ -15,7 +15,7 @@ import XCTest
     } else {
         XCTFail("Expected default animation curve")
     }
-    
+
     // Check calculation strategy type without direct comparison
     if case .priorityThenPosition(let direction) = config.calculationStrategy {
         if case .leftToRight = direction {
@@ -34,9 +34,9 @@ import XCTest
         animationCurve: .spring(response: 0.4, dampingFraction: 0.7),
         calculationStrategy: .positionOnly(.topToBottom)
     )
-    
+
     #expect(config.baseDelay == 0.2)
-    
+
     // Check calculation strategy
     if case .positionOnly(let direction) = config.calculationStrategy {
         if case .topToBottom = direction {
@@ -47,7 +47,7 @@ import XCTest
     } else {
         XCTFail("Expected positionOnly strategy")
     }
-    
+
     // Check animation curve
     if case .spring(let response, let dampingFraction) = config.animationCurve {
         #expect(response == 0.4)
@@ -61,7 +61,7 @@ import XCTest
 
 @Test func testAnimationCurveDefault() {
     let curve = StaggerConfiguration.AnimationCurve.default
-    
+
     if case .default = curve {
         // This is correct
     } else {
@@ -71,7 +71,7 @@ import XCTest
 
 @Test func testAnimationCurveEaseIn() {
     let curve = StaggerConfiguration.AnimationCurve.easeIn
-    
+
     if case .easeIn = curve {
         // This is correct
     } else {
@@ -81,7 +81,7 @@ import XCTest
 
 @Test func testAnimationCurveEaseOut() {
     let curve = StaggerConfiguration.AnimationCurve.easeOut
-    
+
     if case .easeOut = curve {
         // This is correct
     } else {
@@ -91,7 +91,7 @@ import XCTest
 
 @Test func testAnimationCurveEaseInOut() {
     let curve = StaggerConfiguration.AnimationCurve.easeInOut
-    
+
     if case .easeInOut = curve {
         // This is correct
     } else {
@@ -103,7 +103,7 @@ import XCTest
     let response = 0.6
     let dampingFraction = 0.8
     let curve = StaggerConfiguration.AnimationCurve.spring(response: response, dampingFraction: dampingFraction)
-    
+
     if case .spring(let resultResponse, let resultDampingFraction) = curve {
         #expect(resultResponse == response)
         #expect(resultDampingFraction == dampingFraction)
@@ -115,7 +115,7 @@ import XCTest
 @Test func testAnimationCurveCustom() {
     let customAnimation = Animation.linear(duration: 0.5)
     let curve = StaggerConfiguration.AnimationCurve.custom(customAnimation)
-    
+
     if case .custom = curve {
         // This is correct
     } else {
@@ -127,7 +127,7 @@ import XCTest
 
 @Test func testCalculationStrategyDefault() {
     let strategy = StaggerConfiguration.CalculationStrategy.default
-    
+
     if case .priorityThenPosition(let direction) = strategy {
         if case .leftToRight = direction {
             // This is correct
@@ -148,7 +148,7 @@ import XCTest
         .topToBottom,
         .bottomToTop
     ]
-    
+
     #expect(directions.count == 4)
 }
 
@@ -156,19 +156,19 @@ import XCTest
 
 @Test func testEnvironmentValuesDefaults() {
     let values = EnvironmentValues()
-    
+
     #expect(values.delays.isEmpty)
-    
+
     let defaultConfig = values.configuration
     #expect(defaultConfig.baseDelay == 0.1)
-    
+
     // Check animation curve type
     if case .default = defaultConfig.animationCurve {
         // This is correct
     } else {
         XCTFail("Expected default animation curve")
     }
-    
+
     // Check calculation strategy type
     if case .priorityThenPosition(let direction) = defaultConfig.calculationStrategy {
         if case .leftToRight = direction {
