@@ -1,23 +1,61 @@
 import SwiftUI
 
-/// View modifier that manages staggered animations for its children.
+// MARK: - StaggerContainerViewModifier
+
+/// View modifier that coordinates staggered animations for descendant views.
 ///
-/// This modifier collects information about all child views using the `stagger()`
-/// modifier, calculates appropriate delays, and coordinates the animations.
+/// This is an internal implementation detail of the stagger animation system.
+/// It is applied automatically when you use the `.staggerContainer()` view modifier.
+///
+/// The container modifier orchestrates the entire stagger animation system:
+///
+/// 1. **Collection**: Gathers metadata from all descendant views using `.stagger()`
+///    via the SwiftUI preference system (``StaggerPreferenceKey``)
+///
+/// 2. **Sorting**: Orders collected views according to the configured
+///    ``StaggerConfiguration/CalculationStrategy``
+///
+/// 3. **Delay Calculation**: Assigns incrementing delays based on sort order
+///    and the configured ``StaggerConfiguration/baseDelay``
+///
+/// 4. **Distribution**: Passes calculated delays back down to child views
+///    via the environment (``EnvironmentValues/delays``)
+///
+/// 5. **Lifecycle Management**: Tracks which views have been animated to
+///    prevent re-animation, and cleans up state when the container disappears
+///
+/// - Note: This type is internal and not part of the public API. Use the
+///   view extension method ``SwiftUICore/View/staggerContainer(configuration:)`` instead.
 struct StaggerContainerViewModifier: ViewModifier {
-    /// Configuration for the staggered animations.
+    /// Configuration controlling animation timing and ordering.
     let configuration: StaggerConfiguration
 
-    /// Payloads for views that haven't been animated yet.
+    /// Metadata for views that haven't been animated yet.
+    ///
+    /// This array is populated via preference changes and filtered
+    /// to exclude already-seen views.
     @State private var remainingPayloads: [StaggerViewMetadata] = []
 
-    /// Set of view IDs that have already been processed.
+    /// Set of namespace IDs for views that have already been processed.
+    ///
+    /// Used to prevent re-animating views that have already appeared.
+    /// When new views are added dynamically, only the new ones animate.
     @State private var seenIds: Set<Namespace.ID> = []
 
-    /// Whether the container is currently active.
+    /// Tracks whether the container is currently in the view hierarchy.
+    ///
+    /// When `false`, preference changes are ignored to prevent
+    /// processing during view teardown.
     @State private var isActive = true
 
-    /// Calculated delays for each view based on the configuration and strategy.
+    /// Calculates animation delays for all remaining (unseen) views.
+    ///
+    /// The delays are calculated by:
+    /// 1. Sorting the remaining payloads using the configured strategy
+    /// 2. Assigning each view a delay of `index × baseDelay`
+    ///
+    /// This dictionary is passed down via the environment for child
+    /// views to read their individual delays.
     private var delays: [Namespace.ID: Double] {
         let sorted = sortPayloads(remainingPayloads, strategy: configuration.calculationStrategy)
         return Dictionary(
