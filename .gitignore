@@ -60,3 +60,9 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
+
+# Demo - ignore everything except GIFs
+demo/*
+!demo/*.gif
+
+.DS_Store
