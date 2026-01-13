@@ -11,7 +11,9 @@ This project is based on the [objc.io Swift Talk episode "Staggered Animations R
 [![MIT](https://img.shields.io/badge/license-MIT-black.svg)](https://opensource.org/licenses/MIT)
 
 <p align="center">
-  <img src="demo/list.gif" width="280" alt="List stagger animation">&nbsp;&nbsp;<img src="demo/grid.gif" width="280" alt="Grid stagger animation">&nbsp;&nbsp;<img src="demo/cards.gif" width="280" alt="Cards stagger animation">
+  <img src="demo/list.gif" width="200" alt="List stagger animation">
+  <img src="demo/grid.gif" width="200" alt="Grid stagger animation">
+  <img src="demo/cards.gif" width="200" alt="Cards stagger animation">
 </p>
 
 ## Features
@@ -35,6 +37,7 @@ dependencies: [
 ```
 
 Or add it in Xcode:
+
 1. Go to File → Add Packages...
 2. Paste the repository URL: `https://github.com/ivan-magda/swiftui-stagger-animation.git`
 3. Click "Add Package"
@@ -120,9 +123,9 @@ VStack {
 ```swift
 struct ContentView: View {
     @State private var isVisible = false
-    
+
     let colors: [Color] = [.red, .orange, .yellow, .green, .blue, .purple]
-    
+
     var body: some View {
         VStack(spacing: 16) {
             Text("Stagger Animation Demo")
@@ -131,7 +134,7 @@ struct ContentView: View {
                     transition: .move(edge: .top).combined(with: .opacity),
                     priority: 10
                 )
-            
+
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 80))], spacing: 16) {
                 ForEach(colors.indices, id: \.self) { index in
                     RoundedRectangle(cornerRadius: 12)
@@ -140,7 +143,7 @@ struct ContentView: View {
                         .stagger(transition: .scale.combined(with: .opacity))
                 }
             }
-            
+
             Button("Reset") {
                 isVisible.toggle()
             }
