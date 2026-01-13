@@ -1,34 +1,58 @@
 # Stagger
 
-A SwiftUI library for creating beautiful staggered animations with minimal code.
+Cascade animations for SwiftUI lists, grids, and collections - without manual delay math.
 
-This project is based on the [objc.io Swift Talk episode "Staggered Animations Revisited"](https://talk.objc.io/episodes/S01E443-staggered-animations-revisited).
+<p align="leading">
+  <img src="demo/list.gif" width="200" alt="List stagger animation">
+  <img src="demo/grid.gif" width="200" alt="Grid stagger animation">
+  <img src="demo/cards.gif" width="200" alt="Cards stagger animation">
+</p>
 
 [![Swift](https://img.shields.io/badge/Swift-6.0-orange.svg)](https://swift.org)
 [![iOS](https://img.shields.io/badge/iOS-17.0+-blue.svg)](https://developer.apple.com/ios)
 [![macOS](https://img.shields.io/badge/macOS-14.0+-blue.svg)](https://developer.apple.com/macos)
 [![tvOS](https://img.shields.io/badge/tvOS-17.0+-blue.svg)](https://developer.apple.com/tvos)
 [![MIT](https://img.shields.io/badge/license-MIT-black.svg)](https://opensource.org/licenses/MIT)
+[![Swift Package Index](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fivan-magda%2Fswiftui-stagger-animation%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/ivan-magda/swiftui-stagger-animation)
 
-<p align="center">
-  <img src="demo/list.gif" width="200" alt="List stagger animation">
-  <img src="demo/grid.gif" width="200" alt="Grid stagger animation">
-  <img src="demo/cards.gif" width="200" alt="Cards stagger animation">
-</p>
+## Quick Start
 
-## Features
+```swift
+VStack {
+    ForEach(items) { item in
+        ItemView(item: item)
+            .stagger()
+    }
+}
+.staggerContainer()
+```
 
-- 🌊 **Simple API**: Add staggered animations with just a single view modifier
-- 🔄 **Customizable**: Control animation timing, order, and transitions
-- 📱 **Accessibility**: Respects reduced motion settings
-- 🧩 **Composable**: Works with any SwiftUI transition
-- 🔍 **Smart sorting**: Order by position, priority, or custom criteria
+That's it. Views animate in sequence with a default opacity transition.
+
+## Why Stagger?
+
+SwiftUI has no native stagger API. The current workaround looks like this:
+
+```swift
+// The painful way
+ForEach(Array(items.enumerated()), id: \.element.id) { index, item in
+    ItemView(item: item)
+        .animation(.easeOut.delay(Double(index) * 0.1), value: showItems)
+}
+```
+
+Problems with this approach:
+
+- Manual index math for every animated collection
+- Breaks when views are dynamically inserted/removed
+- No completion callbacks
+- Empty container views persist after animations
+
+Stagger handles all of this declaratively. One modifier, any transition, automatic coordination.
 
 ## Installation
 
-### Swift Package Manager
-
-Add the following to your `Package.swift` file:
+Add to your `Package.swift`:
 
 ```swift
 dependencies: [
@@ -36,99 +60,74 @@ dependencies: [
 ]
 ```
 
-Or add it in Xcode:
-
-1. Go to File → Add Packages...
-2. Paste the repository URL: `https://github.com/ivan-magda/swiftui-stagger-animation.git`
-3. Click "Add Package"
+Or in Xcode: File → Add Packages → paste `https://github.com/ivan-magda/swiftui-stagger-animation.git`
 
 ## Usage
-
-### Basic Usage
-
-```swift
-VStack {
-    ForEach(items) { item in
-        ItemView(item: item)
-            .stagger() // Default opacity transition
-    }
-}
-.staggerContainer() // Required to coordinate animations
-```
 
 ### Custom Transitions
 
 ```swift
-// Single transition
-Text("Hello").stagger(transition: .move(edge: .leading))
+Text("Hello")
+    .stagger(transition: .move(edge: .leading))
 
-// Combined transitions
 Image(systemName: "star")
     .stagger(transition: .scale.combined(with: .opacity))
 ```
 
-### Controlling Animation Order
+### Animation Priority
+
+Higher priority values animate first:
 
 ```swift
-// Setting animation priority (higher values animate first)
 Text("First").stagger(priority: 10)
 Text("Second").stagger(priority: 5)
 Text("Third").stagger(priority: 0)
+```
 
-// Configure stagger container
-VStack {
-    // Your views...
-}
+### Configuration
+
+```swift
 .staggerContainer(
     configuration: StaggerConfiguration(
-        baseDelay: 0.1, // Time between each item
+        baseDelay: 0.1,
         animationCurve: .spring(response: 0.5),
         calculationStrategy: .priorityThenPosition(.topToBottom)
     )
 )
 ```
 
-### Animation Strategies
+## API Reference
 
-```swift
-// Available calculation strategies
-.priorityThenPosition(.leftToRight) // Default
-.priorityOnly
-.positionOnly(.topToBottom)
-.custom { lhs, rhs in
-    // Your custom sorting logic
-}
+### Calculation Strategies
 
-// Available directions
-.leftToRight
-.rightToLeft
-.topToBottom
-.bottomToTop
-```
+| Strategy | Behavior |
+|----------|----------|
+| `.priorityThenPosition(.leftToRight)` | Sort by priority first, then position (default) |
+| `.priorityOnly` | Sort by priority only |
+| `.positionOnly(.topToBottom)` | Sort by position only |
+| `.custom { lhs, rhs in ... }` | Your own sorting logic |
+
+**Position directions:** `.leftToRight`, `.rightToLeft`, `.topToBottom`, `.bottomToTop`
 
 ### Animation Curves
 
-```swift
-// Available animation curves
-.default
-.easeIn
-.easeOut
-.easeInOut
-.spring(response: 0.5, dampingFraction: 0.8)
-.custom(Animation.interpolatingSpring(mass: 1, stiffness: 100, damping: 10))
-```
+| Curve | Usage |
+|-------|-------|
+| `.default` | System default animation |
+| `.easeIn`, `.easeOut`, `.easeInOut` | Standard easing |
+| `.spring(response:dampingFraction:)` | Spring physics |
+| `.custom(Animation)` | Any SwiftUI animation |
 
-## Example
+## Full Example
 
 ```swift
 struct ContentView: View {
     @State private var isVisible = false
-
     let colors: [Color] = [.red, .orange, .yellow, .green, .blue, .purple]
 
     var body: some View {
         VStack(spacing: 16) {
-            Text("Stagger Animation Demo")
+            Text("Stagger Demo")
                 .font(.largeTitle)
                 .stagger(
                     transition: .move(edge: .top).combined(with: .opacity),
@@ -144,10 +143,7 @@ struct ContentView: View {
                 }
             }
 
-            Button("Reset") {
-                isVisible.toggle()
-            }
-            .padding()
+            Button("Toggle") { isVisible.toggle() }
         }
         .padding()
         .staggerContainer(
@@ -162,14 +158,22 @@ struct ContentView: View {
 
 ## Requirements
 
-- iOS 17.0+ / macOS 14.0+ / tvOS 17.0+
-- Swift 6.0+
-- Xcode 15.0+
+| Platform | Minimum Version |
+|----------|-----------------|
+| iOS | 17.0+ |
+| macOS | 14.0+ |
+| tvOS | 17.0+ |
+| Swift | 6.0+ |
+| Xcode | 15.0+ |
+
+## Credits
+
+Based on the [objc.io Swift Talk episode "Staggered Animations Revisited"](https://talk.objc.io/episodes/S01E443-staggered-animations-revisited).
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+PRs welcome. For major changes, open an issue first.
 
 ## License
 
-Stagger is available under the MIT license. See the LICENSE file for more info.
+MIT. See [LICENSE](LICENSE) for details.
