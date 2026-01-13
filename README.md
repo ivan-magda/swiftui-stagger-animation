@@ -10,6 +10,10 @@ This project is based on the [objc.io Swift Talk episode "Staggered Animations R
 [![tvOS](https://img.shields.io/badge/tvOS-17.0+-blue.svg)](https://developer.apple.com/tvos)
 [![MIT](https://img.shields.io/badge/license-MIT-black.svg)](https://opensource.org/licenses/MIT)
 
+<p align="center">
+  <img src="demo/list.gif" width="280" alt="List stagger animation">&nbsp;&nbsp;<img src="demo/grid.gif" width="280" alt="Grid stagger animation">&nbsp;&nbsp;<img src="demo/cards.gif" width="280" alt="Cards stagger animation">
+</p>
+
 ## Features
 
 - 🌊 **Simple API**: Add staggered animations with just a single view modifier
