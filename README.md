@@ -166,6 +166,10 @@ struct ContentView: View {
 | Swift | 6.0+ |
 | Xcode | 15.0+ |
 
+## Documentation
+
+Full API documentation available at [Swift Package Index](https://swiftpackageindex.com/ivan-magda/swiftui-stagger-animation/main/documentation/stagger).
+
 ## Credits
 
 Based on the [objc.io Swift Talk episode "Staggered Animations Revisited"](https://talk.objc.io/episodes/S01E443-staggered-animations-revisited).
