@@ -48,22 +48,11 @@ struct StaggerContainerViewModifier: ViewModifier {
     /// processing during view teardown.
     @State private var isActive = true
 
-    /// Calculates animation delays for all remaining (unseen) views.
+    /// Cached animation delays for all remaining (unseen) views.
     ///
-    /// The delays are calculated by:
-    /// 1. Sorting the remaining payloads using the configured strategy
-    /// 2. Assigning each view a delay of `index × baseDelay`
-    ///
-    /// This dictionary is passed down via the environment for child
-    /// views to read their individual delays.
-    private var delays: [Namespace.ID: Double] {
-        let sorted = sortPayloads(remainingPayloads, strategy: configuration.calculationStrategy)
-        return Dictionary(
-            uniqueKeysWithValues: sorted.enumerated().map { idx, payload in
-                (payload.id, Double(idx) * configuration.baseDelay)
-            }
-        )
-    }
+    /// Updated via `onChange(of: remainingPayloads)` to avoid
+    /// recomputing on every body evaluation.
+    @State private var delays: [Namespace.ID: Double] = [:]
 
     /// Sorts payloads according to the specified strategy.
     ///
@@ -153,6 +142,14 @@ struct StaggerContainerViewModifier: ViewModifier {
                         seenIds.formUnion(remainingPayloads.map(\.id))
                     }
                 }
+            }
+            .onChange(of: remainingPayloads) { _, newPayloads in
+                let sorted = sortPayloads(newPayloads, strategy: configuration.calculationStrategy)
+                delays = Dictionary(
+                    uniqueKeysWithValues: sorted.enumerated().map { idx, payload in
+                        (payload.id, Double(idx) * configuration.baseDelay)
+                    }
+                )
             }
             .onAppear { isActive = true }
             .onDisappear {
