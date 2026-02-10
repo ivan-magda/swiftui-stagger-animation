@@ -10,7 +10,6 @@ let sampleColors = (0..<10).map { ix in
     MyColor(color: .init(hue: .init(ix) / 20, saturation: 0.8, brightness: 0.8))
 }
 
-@available(iOS 16.0, *)
 struct ContentView: View {
     @State private var colors = sampleColors
 
@@ -43,7 +42,6 @@ struct ContentView: View {
     }
 }
 
-@available(iOS 16.0, *)
 #Preview {
     ContentView()
 }
