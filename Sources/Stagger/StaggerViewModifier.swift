@@ -69,7 +69,7 @@ struct StaggerViewModifier<T: Transition>: ViewModifier {
                 content: content,
                 phase: (shouldAnimate ? isVisible : true) ? .identity : .willAppear
             )
-            .overlay {
+            .background {
                 GeometryReader { geometryProxy in
                     Color.clear
                         .preference(
