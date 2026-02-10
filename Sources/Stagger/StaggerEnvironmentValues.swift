@@ -21,9 +21,9 @@ extension EnvironmentValues {
     /// - Value: The delay in seconds before that view should animate
     @Entry var staggerDelays: [Namespace.ID: Double] = [:]
 
-    /// The stagger configuration passed down from the container.
+    /// The stagger animation passed down from the container.
     ///
     /// Child views read this to access the animation curve when
     /// triggering their entrance animations.
-    @Entry var staggerConfiguration: StaggerConfiguration = .init()
+    @Entry var staggerAnimation: Animation = .default
 }

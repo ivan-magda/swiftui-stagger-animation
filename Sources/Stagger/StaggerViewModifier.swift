@@ -44,10 +44,10 @@ struct StaggerViewModifier<T: Transition>: ViewModifier {
     /// its own delay using its namespace ID.
     @Environment(\.staggerDelays) var delays
 
-    /// Animation configuration from the stagger container.
+    /// Animation from the stagger container.
     ///
-    /// Contains the animation curve to use when triggering the animation.
-    @Environment(\.staggerConfiguration) var configuration
+    /// The animation curve to use when triggering the animation.
+    @Environment(\.staggerAnimation) var animation
 
     /// System accessibility setting for reduced motion.
     ///
@@ -88,9 +88,12 @@ struct StaggerViewModifier<T: Transition>: ViewModifier {
                 guard let delay else {
                     return
                 }
+                guard !isVisible else {
+                    return
+                }
 
                 if shouldAnimate {
-                    withAnimation(configuration.animationCurve.animation.delay(delay)) {
+                    withAnimation(animation.delay(delay)) {
                         isVisible = true
                     }
                 } else {

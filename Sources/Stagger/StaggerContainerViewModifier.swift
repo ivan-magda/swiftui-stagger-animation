@@ -134,7 +134,7 @@ struct StaggerContainerViewModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .environment(\.staggerDelays, delays)
-            .environment(\.staggerConfiguration, configuration)
+            .environment(\.staggerAnimation, configuration.animationCurve.animation)
             .onPreferenceChange(StaggerPreferenceKey.self) { payloads in
                 Task { @MainActor in
                     if isActive {
