@@ -144,8 +144,8 @@ struct StaggerContainerViewModifier: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .environment(\.delays, delays)
-            .environment(\.configuration, configuration)
+            .environment(\.staggerDelays, delays)
+            .environment(\.staggerConfiguration, configuration)
             .onPreferenceChange(StaggerPreferenceKey.self) { payloads in
                 Task { @MainActor in
                     if isActive {

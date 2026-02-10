@@ -42,12 +42,12 @@ struct StaggerViewModifier<T: Transition>: ViewModifier {
     /// The container calculates delays for all staggered children and
     /// passes them down via this environment value. Each view looks up
     /// its own delay using its namespace ID.
-    @Environment(\.delays) var delays
+    @Environment(\.staggerDelays) var delays
 
     /// Animation configuration from the stagger container.
     ///
     /// Contains the animation curve to use when triggering the animation.
-    @Environment(\.configuration) var configuration
+    @Environment(\.staggerConfiguration) var configuration
 
     /// System accessibility setting for reduced motion.
     ///
