@@ -4,13 +4,20 @@ import SwiftUI
 
 // MARK: - Sample View Tests
 
+struct TestColor: Identifiable {
+    let id = UUID()
+    let color: Color
+}
+
 struct SampleContentView: View {
     @State private var isVisible = false
 
     let items = (0..<5).map { _ in
-        Color(red: Double.random(in: 0...1),
-              green: Double.random(in: 0...1),
-              blue: Double.random(in: 0...1))
+        TestColor(color: Color(
+            red: Double.random(in: 0...1),
+            green: Double.random(in: 0...1),
+            blue: Double.random(in: 0...1)
+        ))
     }
 
     var body: some View {
@@ -23,9 +30,9 @@ struct SampleContentView: View {
                 )
 
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 20) {
-                ForEach(items.indices, id: \.self) { index in
+                ForEach(items) { item in
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(items[index])
+                        .fill(item.color)
                         .frame(height: 100)
                         .stagger()
                 }
