@@ -1,6 +1,5 @@
 import Testing
 import SwiftUI
-import XCTest
 @testable import Stagger
 
 // MARK: - Configuration Tests
@@ -13,7 +12,7 @@ import XCTest
     if case .default = config.animationCurve {
         // This is correct
     } else {
-        XCTFail("Expected default animation curve")
+        Issue.record("Expected default animation curve")
     }
 
     // Check calculation strategy type without direct comparison
@@ -21,10 +20,10 @@ import XCTest
         if case .leftToRight = direction {
             // This is correct
         } else {
-            XCTFail("Expected leftToRight direction")
+            Issue.record("Expected leftToRight direction")
         }
     } else {
-        XCTFail("Expected priorityThenPosition strategy")
+        Issue.record("Expected priorityThenPosition strategy")
     }
 }
 
@@ -42,10 +41,10 @@ import XCTest
         if case .topToBottom = direction {
             // This is correct
         } else {
-            XCTFail("Expected topToBottom direction")
+            Issue.record("Expected topToBottom direction")
         }
     } else {
-        XCTFail("Expected positionOnly strategy")
+        Issue.record("Expected positionOnly strategy")
     }
 
     // Check animation curve
@@ -53,7 +52,7 @@ import XCTest
         #expect(response == 0.4)
         #expect(dampingFraction == 0.7)
     } else {
-        XCTFail("Expected spring animation curve")
+        Issue.record("Expected spring animation curve")
     }
 }
 
@@ -65,7 +64,7 @@ import XCTest
     if case .default = curve {
         // This is correct
     } else {
-        XCTFail("Expected default animation curve")
+        Issue.record("Expected default animation curve")
     }
 }
 
@@ -75,7 +74,7 @@ import XCTest
     if case .easeIn = curve {
         // This is correct
     } else {
-        XCTFail("Expected easeIn animation curve")
+        Issue.record("Expected easeIn animation curve")
     }
 }
 
@@ -85,7 +84,7 @@ import XCTest
     if case .easeOut = curve {
         // This is correct
     } else {
-        XCTFail("Expected easeOut animation curve")
+        Issue.record("Expected easeOut animation curve")
     }
 }
 
@@ -95,7 +94,7 @@ import XCTest
     if case .easeInOut = curve {
         // This is correct
     } else {
-        XCTFail("Expected easeInOut animation curve")
+        Issue.record("Expected easeInOut animation curve")
     }
 }
 
@@ -108,7 +107,7 @@ import XCTest
         #expect(resultResponse == response)
         #expect(resultDampingFraction == dampingFraction)
     } else {
-        XCTFail("Expected spring animation curve")
+        Issue.record("Expected spring animation curve")
     }
 }
 
@@ -119,7 +118,7 @@ import XCTest
     if case .custom = curve {
         // This is correct
     } else {
-        XCTFail("Expected custom animation curve")
+        Issue.record("Expected custom animation curve")
     }
 }
 
@@ -132,10 +131,10 @@ import XCTest
         if case .leftToRight = direction {
             // This is correct
         } else {
-            XCTFail("Expected leftToRight direction")
+            Issue.record("Expected leftToRight direction")
         }
     } else {
-        XCTFail("Expected priorityThenPosition strategy")
+        Issue.record("Expected priorityThenPosition strategy")
     }
 }
 
@@ -157,16 +156,16 @@ import XCTest
 @Test func testEnvironmentValuesDefaults() {
     let values = EnvironmentValues()
 
-    #expect(values.delays.isEmpty)
+    #expect(values.staggerDelays.isEmpty)
 
-    let defaultConfig = values.configuration
+    let defaultConfig = values.staggerConfiguration
     #expect(defaultConfig.baseDelay == 0.1)
 
     // Check animation curve type
     if case .default = defaultConfig.animationCurve {
         // This is correct
     } else {
-        XCTFail("Expected default animation curve")
+        Issue.record("Expected default animation curve")
     }
 
     // Check calculation strategy type
