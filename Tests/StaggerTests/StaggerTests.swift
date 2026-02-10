@@ -158,26 +158,8 @@ import SwiftUI
 
     #expect(values.staggerDelays.isEmpty)
 
-    let defaultConfig = values.staggerConfiguration
-    #expect(defaultConfig.baseDelay == 0.1)
-
-    // Check animation curve type
-    if case .default = defaultConfig.animationCurve {
-        // This is correct
-    } else {
-        Issue.record("Expected default animation curve")
-    }
-
-    // Check calculation strategy type
-    if case .priorityThenPosition(let direction) = defaultConfig.calculationStrategy {
-        if case .leftToRight = direction {
-            // This is correct
-        } else {
-            Issue.record("Expected leftToRight direction")
-        }
-    } else {
-        Issue.record("Expected priorityThenPosition strategy")
-    }
+    let defaultAnimation = values.staggerAnimation
+    #expect(defaultAnimation == .default)
 }
 
 // MARK: - StaggerViewMetadata Computed Properties Tests

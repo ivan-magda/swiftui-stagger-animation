@@ -24,7 +24,7 @@ struct StaggerPreferenceKey: PreferenceKey {
     /// Default value when no staggered views are present.
     ///
     /// An empty array indicates no views are waiting to be animated.
-    static let defaultValue: [StaggerViewMetadata] = []
+    static var defaultValue: [StaggerViewMetadata] { [] }
 
     /// Combines metadata from multiple staggered views.
     ///
